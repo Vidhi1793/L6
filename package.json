@@ -18,7 +18,7 @@
     ]
   },
   "keywords":[],
-  "author": "",
+  "author": "vidhi",
   "license": "ISC",
   "dependencies": {
     "ejs": "^3.1.8",
