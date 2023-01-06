@@ -1,5 +1,5 @@
 "use strict";
-const { Model, Op } = require("sequelize");
+const { Model,Op} = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class Todo extends Model {
     /**
@@ -12,75 +12,57 @@ module.exports = (sequelize, DataTypes) => {
     }
 
     static addTodo({ title, dueDate }) {
-      return this.create({
-        title: title,
-        dueDate: dueDate,
-        completed: false,
-      });
+      return this.create({ title: title, dueDate: dueDate, completed: false });
     }
 
-    static getTodos() {
-      return this.findAll();
+    static gettodos(){
+      return this.findAll({order:[["id","ASC"]]});
     }
-
-    // markAsCompleted() {
-    //   return this.update({ completed: true });
-    // }
-    setCompletionStatus(boolean) {
-      return this.update({ completed: boolean });
-    }
-
-    static overDue() {
+    static Overdue(){
       return this.findAll({
-        where: {
-          dueDate: {
-            [Op.lt]: new Date().toLocaleDateString("en-CA"),
+        where:{
+          dueDate:{
+            [Op.lt]:new Date().toISOString()
           },
+          completed:false,
         },
-        order: [["id", "ASC"]],
-      });
+        order:[["id","ASC"]]
+      })
     }
-
-    static dueToday() {
+    static duelater(){
       return this.findAll({
-        where: {
-          dueDate: {
-            [Op.eq]: new Date().toLocaleDateString("en-CA"),
+        where:{
+          dueDate:{
+            [Op.gt]:new Date().toISOString()
           },
+          completed:false,
         },
-        order: [["id", "ASC"]],
-      });
+        order:[["id","ASC"]]
+      })
     }
-
-    static dueLater() {
+    static duetoday(){
       return this.findAll({
-        where: {
-          dueDate: {
-            [Op.gt]: new Date().toLocaleDateString("en-CA"),
+        where:{
+          dueDate:{
+            [Op.eq]:new Date().toISOString()
           },
+          completed:false,
         },
-        order: [["id", "ASC"]],
-      });
+        order:[["id","ASC"]]
+      })
     }
-
-    static async remove(id) {
-      return this.destroy({
-        where: {
-          id,
-        },
-      });
-    }
-
-    static completedItems() {
+    static completetodo(){
       return this.findAll({
-        where: {
-          completed: true,
+        where:{
+          completed:true,
         },
-        order: [["id", "ASC"]],
-      });
+        order:[["id","ASC"]],
+      })
+    }
+     setCompletionStatus(status) {
+      return this.update({ completed: status });
     }
   }
-
   Todo.init(
     {
       title: DataTypes.STRING,
